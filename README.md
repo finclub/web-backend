@@ -16,19 +16,12 @@ npm i
 ```
 <br>
 
-2. Pull Development Branch
+2. Create your own feature branch
 ```bash
-git checkout development
-git pull origin development
-```
-<br>
-
-3. Create your own feature branch
-```bash
-git checkout -b feature/your-feature-name
+git checkout -b <name>/your-feature-name
 git add .
 git commit -m "Describe your changes"
-git push origin feature/your-feature-name
+git push origin <name>/your-feature-name
 ```
 <br>
 
