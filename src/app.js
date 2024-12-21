@@ -1,26 +1,19 @@
 import express from 'express';
-import userRoutes from './api/routes/UserRoutes.js';
-import config from './config/config.js';
-import logger from './config/logger.js';
-import { testDatabaseConnection } from './db/index.js';
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+import authRoutes from './routes/authRoutes.js';
+
+dotenv.config();
 
 const app = express();
 
-app.use(express.json());
+// Middleware
+app.use(bodyParser.json());
 
-// Logger middleware to log every HTTP request
-app.use((req, res, next) => {
-    logger.info(`${req.method} ${req.url}`);
-    next();
-});
+// Authentication Routes
+app.use('/api/auth', authRoutes);
 
-app.use('/api', userRoutes);
-
-const port = config.port;
-
-// Test database connection and start server
-testDatabaseConnection().then(() => {
-    app.listen(port, () => {
-        console.log(`Server is running on http://localhost:${port}`);
-    });
+const PORT = process.env.PORT;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
