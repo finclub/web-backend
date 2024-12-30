@@ -1,8 +1,13 @@
-# Dependency directories
+# Dependencies
 node_modules/
+
+# Package lock file
+package-lock.json
 
 # Environment configuration files
 .env
+.env.development
+.env.production
 
 # Logs
 logs/
@@ -17,3 +22,10 @@ build/
 
 # Temporary files
 tmp/
+
+# Serverless directories
+.serverless/
+
+# IDE and editor folders
+# .vscode/
+
