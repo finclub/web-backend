@@ -1,6 +1,6 @@
-const bcrypt = require('bcrypt');
+// import bcrypt from 'bcrypt';
 
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   const Users = sequelize.define(
     'Users',
     {
@@ -65,21 +65,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  // Add hooks
   Users.beforeCreate(async (user) => {
     const saltRounds = 10;
-    user.password = await bcrypt.hash(user.password, saltRounds);
+    // user.password = await bcrypt.hash(user.password, saltRounds);
   });
 
   Users.beforeUpdate(async (user) => {
     if (user.changed('password')) {
-      // Only hash if the password field has changed
       const saltRounds = 10;
-      user.password = await bcrypt.hash(user.password, saltRounds);
+      // user.password = await bcrypt.hash(user.password, saltRounds);
     }
   });
 
-  // **Associations**
   Users.associate = (models) => {
     Users.hasMany(models.UserSubscriptions, {
       foreignKey: 'user_id',

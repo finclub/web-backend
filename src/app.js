@@ -17,7 +17,7 @@ app.use(compression());
 app.use(cors());
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100,
+  max: 100
 });
 app.use('/api/v1', apiLimiter);
 
@@ -41,7 +41,9 @@ app.use('/api/v1', userRoutes);
 testDatabaseConnection()
   .then(() => {
     app.listen(port, () => {
-      console.log(`Server is running on http://localhost:${port}`);
+      console.log(
+        `Server is running on [${config.env}] http://localhost:${port}`
+      );
     });
   })
   .catch((error) => {

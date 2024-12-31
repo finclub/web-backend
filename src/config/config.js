@@ -1,9 +1,9 @@
 import dotenv from 'dotenv';
 
-const envFile = `.env.${process.env.NODE_ENV || 'development'}`;
-dotenv.config({ path: envFile });
+dotenv.config();
 
 export default {
+  env: process.env.NODE_ENV,
   databaseURL: process.env.DATABASE_URL,
   databaseSSLRequire: process.env.DATABASE_SSL_REQUIRE === 'true',
   databaseSSLRejectUnauthorized:
