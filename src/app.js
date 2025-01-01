@@ -3,10 +3,11 @@ import helmet from 'helmet';
 import cors from 'cors';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
-import userRoutes from './routes/UserRoutes.js';
 import config from './config/config.js';
 import logger from './config/logger.js';
+import globalErrorHandler from './middlewares/globalErrorHandler.js';
 import { testDatabaseConnection } from './config/db.js';
+import routes from './routes/index.js';
 
 const app = express();
 const port = config.port;
@@ -19,7 +20,7 @@ const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100
 });
-app.use('/api/v1', apiLimiter);
+// app.use('/api/v1', apiLimiter);
 
 app.use((req, res, next) => {
   if (process.env.NODE_ENV !== 'production') {
@@ -35,8 +36,9 @@ app.get('/', (req, res) => {
   res.status(200).send({ message: 'Welcome to the Gym Management API!' });
 });
 
-// Routes
-app.use('/api/v1', userRoutes);
+app.use('/api/v1', routes);
+
+app.use(globalErrorHandler);
 
 testDatabaseConnection()
   .then(() => {

@@ -1,31 +1,45 @@
-import Users from '../models/User.js';
+import User from '../models/User.js';
+import STATUS_CODES from '../config/statusCodes.js';
+import sendResponse from '../middlewares/responseHandler.js';
 
+// Fetch all users
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await Users.findAll({
-      attributes: { exclude: ['password'] } // Exclude sensitive fields like password
-    });
-
-    res.status(200).json({
+    const users = await User.findAll({ attributes: { exclude: ['password'] } });
+    sendResponse(res, {
       success: true,
-      data: users
+      message: 'Users fetched successfully.',
+      data: users,
+      statusCode: STATUS_CODES.OK
     });
   } catch (error) {
-    console.error('Error fetching users:', error);
-    res.status(500).json({
+    sendResponse(res, {
       success: false,
-      message: 'Failed to fetch users'
+      message: 'Failed to fetch users.',
+      errors: { details: error.message },
+      statusCode: STATUS_CODES.INTERNAL_SERVER_ERROR
     });
   }
 };
 
-// import User from '../models/User.js';
+// Create a new user
+export const createUser = async (req, res) => {
+  try {
+    const { first_name, last_name, email, password } = req.body;
 
-// export const getAllUsers = async (req, res) => {
-//   try {
-//     const users = await User.findAll();
-//     res.status(200).json(users);
-//   } catch (error) {
-//     res.status(500).json({ message: 'Error retrieving users', error: error });
-//   }
-// };
+    const user = await User.create({ first_name, last_name, email, password });
+    sendResponse(res, {
+      success: true,
+      message: 'User created successfully.',
+      data: { user_id: user.user_id },
+      statusCode: STATUS_CODES.CREATED
+    });
+  } catch (error) {
+    sendResponse(res, {
+      success: false,
+      message: 'Failed to create user.',
+      errors: { details: error.message },
+      statusCode: STATUS_CODES.BAD_REQUEST
+    });
+  }
+};

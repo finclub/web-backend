@@ -1,95 +1,96 @@
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('./database'); // Adjust this require to point to your Sequelize connection setup
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/db.js';
 
-class Visitor extends Model {}
-
-Visitor.init(
+const Visitor = sequelize.define(
+  'Visitor',
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true
-    },
-    branch_id: {
-      type: DataTypes.INTEGER,
+      autoIncrement: true,
       allowNull: false
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    dob: {
-      type: DataTypes.DATE
+    phone_number: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      unique: true
     },
-    gender: {
-      type: DataTypes.ENUM('Male', 'Female', 'Other')
+    email: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true,
+      validate: {
+        isEmail: true
+      }
     },
-    plan_category: {
-      type: DataTypes.STRING
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
-    plan_subcategory: {
-      type: DataTypes.STRING
-    },
-    billing_cycle: {
-      type: DataTypes.STRING
-    },
-    negotiated_price: {
-      type: DataTypes.DECIMAL(10, 2)
-    },
-    contact_id: {
-      type: DataTypes.INTEGER
-    },
-    lead_type: {
-      type: DataTypes.STRING
-    },
-    trial_start_date: {
-      type: DataTypes.DATE
-    },
-    trial_end_date: {
-      type: DataTypes.DATE
-    },
-    expected_joining: {
-      type: DataTypes.DATE
-    },
-    remarks: {
-      type: DataTypes.TEXT
-    },
-    enquiry_status: {
-      type: DataTypes.STRING
-    },
-    follow_up_date: {
-      type: DataTypes.DATE
-    },
-    reference_type: {
-      type: DataTypes.STRING
-    },
-    reference: {
-      type: DataTypes.STRING
-    },
-    assigned_to: {
-      type: DataTypes.INTEGER
-    },
-    created_by: {
-      type: DataTypes.INTEGER
-    },
-    updated_by: {
-      type: DataTypes.INTEGER
-    },
-    created_at: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW
-    },
-    updated_at: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isIn: [['admin', 'staff']]
+      }
     }
   },
   {
-    sequelize,
-    modelName: 'Visitor',
-    tableName: 'visitors',
-    timestamps: false // Disable Sequelize automatic timestamps if they are manually defined
+    timestamps: true,
+    tableName: 'visitors'
   }
 );
 
-module.exports = Visitor;
+export default Visitor;
+
+/*
+export default (sequelize, DataTypes) => {
+  return sequelize.define(
+    'Visitor',
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      phone_number: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        unique: true
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+        validate: {
+          isEmail: true
+        }
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      role: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isIn: [['admin', 'staff']]
+        }
+      }
+    },
+    {
+      timestamps: true,
+      tableName: 'visitors'
+    }
+  );
+};
+*/

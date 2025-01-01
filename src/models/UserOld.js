@@ -9,43 +9,43 @@ export const User = sequelize.define(
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
-      allowNull: false,
+      allowNull: false
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     phone_number: {
       type: DataTypes.BIGINT,
       allowNull: false,
-      unique: true,
+      unique: true
     },
     email: {
       type: DataTypes.STRING,
       allowNull: true,
       unique: true,
       validate: {
-        isEmail: true,
-      },
+        isEmail: true
+      }
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     role: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isIn: [['admin', 'staff']],
-      },
+        isIn: [['admin', 'staff']]
+      }
     },
     created_at: {
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
+      defaultValue: DataTypes.NOW
+    }
   },
   {
     timestamps: true,
-    tableName: 'users',
-  },
+    tableName: 'users'
+  }
 );
