@@ -3,6 +3,9 @@ import config from './config.js';
 
 const sequelizeOptions = {
   dialect: 'postgres',
+  define: {
+    underscored: true // Enables camelCase-to-snake_case mapping
+  },
   dialectOptions: {}
 };
 
