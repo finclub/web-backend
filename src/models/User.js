@@ -1,92 +1,47 @@
-// import bcrypt from 'bcrypt';
+// User.js
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/db.js';
 
-export default (sequelize, DataTypes) => {
-  const Users = sequelize.define(
-    'Users',
-    {
-      user_id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
-      },
-      first_name: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-          len: [2, 100]
-        }
-      },
-      last_name: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-          len: [2, 100]
-        }
-      },
-      email: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-        unique: true,
-        validate: {
-          isEmail: true
-        }
-      },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-          len: [8, 255]
-        }
-      },
-      phone: {
-        type: DataTypes.STRING(15),
-        allowNull: true,
-        validate: {
-          is: /^[0-9]+$/, // Only numeric values
-          len: [10, 15]
-        }
-      },
-      role: {
-        type: DataTypes.ENUM('admin', 'staff', 'member'),
-        defaultValue: 'member',
-        allowNull: false
-      },
-      is_active: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true
-      }
+const User = sequelize.define(
+  'User',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false,
     },
-    {
-      timestamps: true,
-      tableName: 'Users'
-    }
-  );
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    phone_number: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      unique: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    role: {
+      type: DataTypes.ENUM('admin', 'staff'),
+      allowNull: false,
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+  },
+  {
+    timestamps: false,
+    tableName: 'users',
+  }
+);
 
-  Users.beforeCreate(async (user) => {
-    const saltRounds = 10;
-    // user.password = await bcrypt.hash(user.password, saltRounds);
-  });
-
-  Users.beforeUpdate(async (user) => {
-    if (user.changed('password')) {
-      const saltRounds = 10;
-      // user.password = await bcrypt.hash(user.password, saltRounds);
-    }
-  });
-
-  Users.associate = (models) => {
-    Users.hasMany(models.UserSubscriptions, {
-      foreignKey: 'user_id',
-      as: 'subscriptions'
-    });
-    Users.hasMany(models.Notifications, {
-      foreignKey: 'user_id',
-      as: 'notifications'
-    });
-  };
-
-  return Users;
-};
+export default User;

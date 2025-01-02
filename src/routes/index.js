@@ -1,3 +1,4 @@
+// src\routes\index.js
 import express from 'express';
 import userRoutes from './userRoutes.js';
 import visitorRoutes from './visitorRoutes.js';
