@@ -109,13 +109,34 @@ export const loginUser = async (req, res) => {
  */
 export const getAllUsers = async (req, res) => {
     try {
-        // Retrieve all users from the database
-        const users = await User.findAll();
+        // Retrieve all users without the password field
+        const users = await User.findAll({
+            attributes: { exclude: ['password', 'created_at'] },
+        });
+
+        // Log success message
+        logger.info('Users fetched successfully');
 
         // Respond with list of users
-        res.status(200).json({ users });
+        return sendResponse(res, {
+            success: true,
+            statusCode: STATUS_CODES.OK,
+            message: 'Users fetched successfully',
+            data: {
+                "users": users
+            }
+        });
     } catch (error) {
         // Respond with error message if fetch fails
-        res.status(500).json({ error: 'Failed to fetch users', details: error.message });
+
+        // Log error message
+        logger.error(`Failed to fetch users: ${error.message}`);
+
+        return sendResponse(res, {
+            success: false,
+            statusCode: STATUS_CODES.INTERNAL_SERVER_ERROR,
+            message: 'Failed to fetch users',
+            errors: error.message
+        });
     }
 };
