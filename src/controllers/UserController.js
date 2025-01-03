@@ -14,7 +14,7 @@ import STATUS_CODES from '../config/statusCodes.js';
  */
 export const registerUser = async (req, res) => {
     // Destructure necessary fields from the request body
-    const { name, phone_number, email, password, role } = req.body;
+    const { name, phone_number, email, password, role = 'admin' } = req.body; // default role is 'admin'
 
     try {
         // Hash the user's password before saving to database
@@ -32,11 +32,21 @@ export const registerUser = async (req, res) => {
         // Exclude password from the response
         const { password: _, ...userWithoutPassword } = newUser.toJSON();
 
-        // Respond with success message and user information (excluding the password)
-        res.status(201).json({ message: 'User registered successfully!', user: userWithoutPassword });
+        return sendResponse(res, {
+            success: true,
+            statusCode: STATUS_CODES.CREATED,
+            message: 'User registered successfully!',
+            data: {
+                "user": userWithoutPassword
+            }
+        });
     } catch (error) {
-        // Respond with error message if registration fails
-        res.status(500).json({ error: 'Failed to register user', details: error.message });
+        return sendResponse(res, {
+            success: false,
+            statusCode: STATUS_CODES.INTERNAL_SERVER_ERROR,
+            message: 'Failed to register user',
+            errors: error.message
+        });
     }
 };
 
@@ -54,7 +64,9 @@ export const loginUser = async (req, res) => {
 
         // If user not found, return error
         if (!user) {
-            // return res.status(404).json({ error: 'User not found' });
+            // Log error message
+            logger.error('User not found');
+
             return sendResponse(res, {
                 success: false,
                 statusCode: STATUS_CODES.NOT_FOUND,
@@ -67,6 +79,9 @@ export const loginUser = async (req, res) => {
 
         // If password is invalid, return error
         if (!isPasswordValid) {
+            // Log error message
+            logger.error('Invalid password');
+
             return sendResponse(res, {
                 success: false,
                 statusCode: STATUS_CODES.NOT_FOUND,
@@ -93,6 +108,10 @@ export const loginUser = async (req, res) => {
 
     } catch (error) {
         // Respond with error message if login fails
+
+        // Log error message
+        logger.error(`Failed to login: ${error.message}`);
+
         return sendResponse(res, {
             success: false,
             statusCode: STATUS_CODES.UNAUTHORIZED,

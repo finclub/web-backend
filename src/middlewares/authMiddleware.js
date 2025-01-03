@@ -4,29 +4,6 @@ import config from '../config/config.js';
 import logger from '../config/logger.js';
 import sendResponse from '../middlewares/responseHandler.js';
 
-// export const authenticate = (req, res, next) => {
-//   const token = req.headers.authorization?.split(' ')[1];
-//   if (!token) {
-//     return sendResponse(res, {
-//       success: false,
-//       message: 'Authorization token missing.',
-//       statusCode: STATUS_CODES.UNAUTHORIZED
-//     });
-//   }
-
-//   try {
-//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-//     req.user = decoded;
-//     next();
-//   } catch (err) {
-//     return sendResponse(res, {
-//       success: false,
-//       message: 'Invalid token.',
-//       statusCode: STATUS_CODES.UNAUTHORIZED
-//     });
-//   }
-// };
-
 /**
  * Middleware to verify JWT tokens.
  * Extracts token from the Authorization header ("Bearer <token>")
@@ -63,13 +40,19 @@ export const authenticateToken = (req, res, next) => {
     next();
   });
 };
+
 export const authenticateAdmin = (req, res, next) => {
   authenticateToken(req, res, () => {
     if (req.user && req.user.role === 'admin') {
       next();
     } else {
       logger.warn(`Unauthorized access attempt from email: ${req.user?.email}}`);
-      return sendResponse(res, { success: false, message: 'Admin privileges required', statusCode: STATUS_CODES.FORBIDDEN });
+
+      return sendResponse(res, {
+        success: false,
+        message: 'Admin privileges required',
+        statusCode: STATUS_CODES.FORBIDDEN
+      });
     }
   });
 };
