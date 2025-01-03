@@ -61,43 +61,6 @@ export const createSubscription = async (req, res) => {
 };
 
 // Update an existing subscription
-// export const updateSubscription = async (req, res) => {
-//   const { id } = req.params;
-//   const {
-//     club_id,
-//     name,
-//     category,
-//     price,
-//     billing_cycle,
-//     description,
-//     active,
-//   } = req.body;
-
-//   try {
-//     const result = await pool.query(
-//       `
-//       UPDATE member_subscriptions
-//       SET 
-//         club_id = $1, name = $2, category = $3, price = $4, billing_cycle = $5, 
-//         description = $6, active = $7, updated_at = CURRENT_TIMESTAMP
-//       WHERE id = $8
-//       RETURNING *
-//       `,
-//       [club_id, name, category, price, billing_cycle, description, active, id]
-//     );
-
-//     if (result.rows.length === 0) {
-//       return res.status(404).json({ message: 'Subscription not found' });
-//     }
-//     res.status(200).json(result.rows[0]);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
-
-
-
-
 
 export const updateSubscription = async (req, res) => {
   const { id } = req.params;

@@ -43,8 +43,7 @@ export const createMember = async (req, res) => {
     reference_type,
     subscription_id,
     add_on_services,
-    created_by,
-    active,
+    created_by
   } = req.body;
 
   try {
@@ -53,14 +52,14 @@ export const createMember = async (req, res) => {
       INSERT INTO members (
         name, email, phone_number, dob, gender, emergency_contact_name, 
         emergency_contact_number, manual_receipt_number, profile_pic, reference_type, 
-        subscription_id, add_on_services, created_by, active
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+        subscription_id, add_on_services, created_by
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13 )
       RETURNING *
       `,
       [
         name, email, phone_number, dob, gender, emergency_contact_name,
         emergency_contact_number, manual_receipt_number, profile_pic, reference_type,
-        subscription_id, add_on_services, created_by, active
+        subscription_id, add_on_services, created_by
       ]
     );
     res.status(201).json(result.rows[0]);
