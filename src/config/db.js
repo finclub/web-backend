@@ -27,4 +27,16 @@ const testDatabaseConnection = async () => {
   }
 };
 
-export { sequelize, testDatabaseConnection };
+const syncDatabase = async () => {
+  try {
+    await sequelize.sync({
+      logging: console.log,
+      force: config.syncDatabaseForce
+    });
+    console.log('Database synced and tables created.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+};
+
+export { sequelize, testDatabaseConnection, syncDatabase };

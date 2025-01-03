@@ -15,11 +15,10 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "npx dotenv -e .env.development nodemon src/app.js ",
-    "prod": "npx dotenv -e .env.production nodemon src/app.js ",
+    "start": "npx dotenv -e .env.development nodemon src/app.js",
+    "prod": "npx dotenv -e .env.production nodemon src/app.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix ",
-    "sync": "node src/sync.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

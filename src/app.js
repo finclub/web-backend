@@ -6,7 +6,7 @@ import rateLimit from 'express-rate-limit';
 import config from './config/config.js';
 import logger from './config/logger.js';
 import globalErrorHandler from './middlewares/globalErrorHandler.js';
-import { testDatabaseConnection } from './config/db.js';
+import { testDatabaseConnection, syncDatabase } from './config/db.js';
 import routes from './routes/index.js';
 
 const app = express();
@@ -41,6 +41,12 @@ app.use('/api/v1', routes);
 app.use(globalErrorHandler);
 
 testDatabaseConnection()
+  .then(() => {
+    if (config.syncDatabase) {
+      console.log('DB Synced');
+      syncDatabase();
+    }
+  })
   .then(() => {
     app.listen(port, () => {
       console.log(
