@@ -16,7 +16,7 @@ const sendResponse = (res, { success, message, data = null, errors = null, statu
     statusCode, // HTTP status
     message, // Message describing the result
     data,    // Data payload (optional)
-    errors,  // Error details (optional)
+    errors  // Error details (optional)
   });
 };
 
