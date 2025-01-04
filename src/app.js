@@ -8,6 +8,9 @@ import logger from './config/logger.js';
 import globalErrorHandler from './middlewares/globalErrorHandler.js';
 import { testDatabaseConnection, syncDatabase } from './config/db.js';
 import routes from './routes/index.js';
+import cron from 'node-cron';
+import { checkExpiredSubscriptions } from './controllers/memberSubscriptionController.js';  // Import the expiry check function
+
 
 const app = express();
 const port = config.port;
@@ -31,10 +34,19 @@ app.use((req, res, next) => {
   next();
 });
 
+
+// Schedule a task to check for expired subscriptions every day at midnight
+cron.schedule('0 0 * * *', () => {
+  console.log('Checking for expired subscriptions...');
+  checkExpiredSubscriptions();  // Run the expiry check function
+});
+
+
 // Default root route
 app.get('/', (req, res) => {
   res.status(200).send({ message: 'Welcome to the Gym Management API!' });
 });
+
 
 app.use('/api/v1', routes);
 

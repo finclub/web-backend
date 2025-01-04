@@ -7,6 +7,7 @@ import {
   deleteMember,
   blockMember,
   unblockMember,
+  getMemberSubscription,
 } from '../controllers/memberController.js';
 
 const router = express.Router();
@@ -18,6 +19,7 @@ router.patch('/:id', updateMember);
 router.delete('/:id', deleteMember);
 router.patch('/:id/block', blockMember);
 router.patch('/:id/unblock', unblockMember);
+router.get('/check/subscription', getMemberSubscription); // use this get API to check/update automatic memeber subscription expiry time
 
 
 export default router;
