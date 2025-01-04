@@ -41,12 +41,24 @@ export const registerUser = async (req, res) => {
       }
     });
   } catch (error) {
-    return sendResponse(res, {
-      success: false,
-      statusCode: STATUS_CODES.INTERNAL_SERVER_ERROR,
-      message: 'Failed to register user',
-      errors: error.message
-    });
+    // Handle unique constraint violation
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      return sendResponse(res, {
+        success: false,
+        statusCode: STATUS_CODES.CONFLICT, // 409 Conflict
+        message: 'User with this email or phone number already exists',
+        errors: error.errors.map((e) => e.message) // Extract specific field errors
+      });
+    }
+    else {
+      return sendResponse(res, {
+        success: false,
+        statusCode: STATUS_CODES.INTERNAL_SERVER_ERROR,
+        message: 'Failed to register user',
+        errors: error.message
+      });
+    }
+
   }
 };
 

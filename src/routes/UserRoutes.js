@@ -8,7 +8,7 @@ import { authenticateToken } from '../middlewares/authMiddleware.js';
 const router = express.Router();
 
 // Register a new user
-router.post('/', validationHandler(registerUserSchema), registerUser);
+router.post('/register', validationHandler(registerUserSchema), registerUser);
 
 // Login a user
 router.post('/login', validationHandler(loginUserSchema), loginUser);
